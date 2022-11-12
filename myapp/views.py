@@ -3080,7 +3080,7 @@ def tempuserautodelete():
             _id = data['id']
             dateTimeVal = _date+" "+_timing
             tempdate = datetime.strptime(dateTimeVal, "%Y-%m-%d  %H:%M")
-            if(tempdate ==  dat1):
+            if(tempdate <=  dat1):
               data2 = tempuser.objects.filter(id=_id)
               data2.delete() 
               print(_id)
@@ -3095,7 +3095,7 @@ def tempuserautodelete():
             _id = pinData['id']
             dateTimeVal = _date+" "+_timing
             pindate = datetime.strptime(dateTimeVal, "%Y-%m-%d  %H:%M")
-            if(pindate ==  dat1):
+            if(pindate <=  dat1):
               print(" Pin matched")
               data2 = pinschedule.objects.filter(id=_id)
               data2.delete() 
