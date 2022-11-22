@@ -19,8 +19,8 @@ from myapp.utils import create_new_ref_number, dt, otplogin, defprofoto
 from datetime import date
 # User._meta.get_field('email')._unique = True
 from django.core.management.base import BaseCommand, CommandError
-# from cus_leads.models import CustomerLeads 
-from datetime import datetime, timedelta
+# from cus_leads.models import CustomerLead
+from datetime import date
 
     
 
@@ -166,7 +166,7 @@ class pinName(models.Model):
 class pinschedule(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     d_id = models.ForeignKey(allDevices, on_delete=models.CASCADE)
-    date = models.DateField(default="2000-01-01",null=True)
+    date = models.DateField(default= date.today(),null=True)
     timing = models.CharField(max_length=200,default='00:00')
     pin1Status = models.IntegerField(blank=True,null=True)
     pin2Status = models.IntegerField(blank=True,null=True)
@@ -239,7 +239,7 @@ class tempuser(models.Model):
     mobile = models.CharField(max_length=10, blank=True)
     email = EmailField(blank=True)
     name = models.CharField(max_length=100,blank=False)
-    date = models.DateField(default="2000-01-01",null=True)
+    date = models.DateField(default= date.today(),null=True)
     timing = models.CharField(max_length=200,default='00:00')
     p_id = models.ForeignKey(place, on_delete=models.CASCADE, blank=True, null=True)
     f_id = models.ForeignKey(floor, on_delete=models.CASCADE, blank=True, null=True)
@@ -707,9 +707,10 @@ class scene_devices(models.Model):
     scenedevices_id = models.CharField(max_length = 10, blank=False,unique=True,primary_key=True,default=create_new_ref_number)
     d_id = models.CharField(max_length=15)
     scene_device_type = models.CharField(max_length=15)
-    status = models.IntegerField(validators=[MinValueValidator(0),
-                                       MaxValueValidator(10)])
-    time = models.DateTimeField()
+    status = models.IntegerField(validators=[MinValueValidator(0),MaxValueValidator(10)])
+                                       
+    date = models.DateField(default= date.today(),null=True)
+    timing = models.CharField(max_length=200,default='00:00')
     
                                        
     

@@ -7,6 +7,11 @@ from myapp.forms import UserRegisterForm, SubUserRegisterForm
 from myapp.models import SomeModel, oneyeardata,place,floor,flat,room,device,deviceStatus,pinschedule,emergencyNumber,sensors,ssidPassword,pinName, threeyears,userimages,deviceIpAddress,subuseraccess,subuserplace,tempuser,tempUserVerification,otptemplogin, energy, oneHourEnergy,FirebaseDetails,scene,scene_devices
 import time
 ##
+class scene_device_Serializers(serializers.ModelSerializer):
+    class Meta:
+        model = scene_devices
+        fields = '__all__'
+
 class Scenedevice_Serializer(serializers.ModelSerializer):
     starttime  = serializers.SerializerMethodField('epoch')
 

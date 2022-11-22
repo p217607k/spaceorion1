@@ -582,10 +582,9 @@ def devicePinStatus(request):
         if received_json_data['put']!='yes':
             serializer = deviceStatusSerializers(data=request.data)
             if serializer.is_valid():
-                print('all set')
+                serializer.save()
 
                 x1 = received_json_data['sensor1']
-                print(x1)
                 x2 = received_json_data['sensor2']
                 x3 = received_json_data['sensor3']
                 x4 = received_json_data['sensor4']
@@ -620,7 +619,6 @@ def devicePinStatus(request):
                     getAlldata('sensor 9',device_id)
                 if x10 > 5:
                     getAlldata('sensor 10',device_id)
-                serializer.save()
                 return Response("data created", status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -3080,7 +3078,7 @@ def tempuserautodelete():
             _id = data['id']
             dateTimeVal = _date+" "+_timing
             tempdate = datetime.strptime(dateTimeVal, "%Y-%m-%d  %H:%M")
-            if(tempdate <=  dat1):
+            if (tempdate <=  dat1):
               data2 = tempuser.objects.filter(id=_id)
               data2.delete() 
               print(_id)
@@ -3095,11 +3093,31 @@ def tempuserautodelete():
             _id = pinData['id']
             dateTimeVal = _date+" "+_timing
             pindate = datetime.strptime(dateTimeVal, "%Y-%m-%d  %H:%M")
-            if(pindate <=  dat1):
-              print(" Pin matched")
-              data2 = pinschedule.objects.filter(id=_id)
-              data2.delete() 
-              print("Pin Schedule delete")
+            if(pindate >=  dat1 ) or  (pindate <  dat1 ) :
+              pinscheduleData = pinschedule.objects.filter(id=_id)
+              deviceStatusObj =  deviceStatus.objects.get(pk=pinscheduleData[0].d_id)
+              deviceStatusObj.pin1Status = pinscheduleData[0].pin1Status
+              deviceStatusObj.pin2Status = pinscheduleData[0].pin2Status
+              deviceStatusObj.pin3Status = pinscheduleData[0].pin3Status
+              deviceStatusObj.pin4Status = pinscheduleData[0].pin4Status
+              deviceStatusObj.pin5Status = pinscheduleData[0].pin5Status
+              deviceStatusObj.pin6Status = pinscheduleData[0].pin6Status
+              deviceStatusObj.pin7Status = pinscheduleData[0].pin7Status
+              deviceStatusObj.pin8Status = pinscheduleData[0].pin8Status
+              deviceStatusObj.pin9Status = pinscheduleData[0].pin9Status
+              deviceStatusObj.pin10Status = pinscheduleData[0].pin10Status
+              deviceStatusObj.pin11Status = pinscheduleData[0].pin11Status
+              deviceStatusObj.pin12Status = pinscheduleData[0].pin12Status
+              deviceStatusObj.d_id = pinscheduleData[0].d_id
+              deviceStatusObj.save()
+            
+              print(" Pin matched",deviceStatusObj.pin1Status)
+            #   serializer = deviceStatusSerializers(data=deviceStatusObj,many=True)
+            # if serializer.is_valid():
+            #     serializer.save()
+              print("DATA CHRCK  ",pinscheduleData[0].pin1Status)
+            #   data2.delete() 
+            #   print("Pin Schedule delete")
             else:
                 print("PinnnnnnnnnnnnnNOOOOOOOOOOOOOOOOOOO")
 
@@ -3107,6 +3125,54 @@ def tempuserautodelete():
 
 
 
+def scene_Devicafun():
+    now = datetime.today()
+    now1=str(now)
+    now2 = now1[:16:]
+    dat1 = datetime.strptime(now2, "%Y-%m-%d  %H:%M")
+
+    dat2 = datetime.strptime(now2, "%Y-%m-%d  %H:%M")
+   
+    pinscheduledlist = scene_devices.objects.all()
+    
+    scenejson = scene_device_Serializers(pinscheduledlist,many=True)
+    
+    
+        
+    for data in scenejson.data:
+        
+            _date = data['date']
+            _timing = data['timing']
+            _id = data['d_id']
+            # scene_device_id = data['scenedevices_id']
+            # id = data['id']
+            
+            # print(type(id),"hellloo")
+            dateTimeVal = _date+" "+_timing
+            
+
+            tempdate = datetime.strptime(dateTimeVal, "%Y-%m-%d  %H:%M")
+            if (tempdate > dat1) and (tempdate <= dat1):
+                scene_devicesData = scene_devices.objects.filter(d_id=_id)
+                deviceStatusObj =  deviceStatus.objects.get(pk=scene_devicesData[0].d_id)
+
+                if(scene_devicesData[0].status is not None):
+                    deviceStatusObj.pin1Status = scene_devicesData[0].status
+                    deviceStatusObj.pin2Status = scene_devicesData[0].status
+                    deviceStatusObj.pin3Status = scene_devicesData[0].status
+                    deviceStatusObj.pin4Status = scene_devicesData[0].status
+                    deviceStatusObj.pin5Status = scene_devicesData[0].status
+                    deviceStatusObj.pin6Status = scene_devicesData[0].status
+                    deviceStatusObj.pin7Status = scene_devicesData[0].status
+                    deviceStatusObj.pin8Status = scene_devicesData[0].status
+                    deviceStatusObj.pin9Status = scene_devicesData[0].status
+                    deviceStatusObj.pin10Status = scene_devicesData[0].status
+                
+                    deviceStatusObj.save()
+                    # scene_devicesData.delete() 
+               
+            else:
+                print("NOOOOOOOOOOOOOOOOOOO")
 
 
 

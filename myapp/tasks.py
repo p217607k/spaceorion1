@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from celery import shared_task
 from celery.utils.log import get_task_logger
 
-from myapp.views import tempuserautodelete
+from myapp.views import tempuserautodelete,scene_Devicafun
  
 logger = get_task_logger(__name__)
  
@@ -16,5 +16,6 @@ logger = get_task_logger(__name__)
 def thirty_second_func():
     print("I run every 30 seconds using Celery Beat")
     tempuserautodelete()
+    scene_Devicafun()
     return "Done"
  
